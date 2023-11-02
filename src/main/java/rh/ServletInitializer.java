@@ -1,4 +1,4 @@
-package com.example.rh_test;
+package rh;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
