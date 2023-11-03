@@ -3,3 +3,32 @@
 <!-- Tabler Core -->
 <script src="/js/tabler.min.js?1684106062" defer></script>
 <script src="/js/demo.min.js?1684106062" defer></script>
+
+<!-- FontAwesome -->
+<script src="/libs/fontawesome/js/all.min.js"></script>
+
+<!-- Jquery validation -->
+<script src="/libs/jquery-validation/lib/jquery-3.1.1.js"></script>
+<script src="/libs/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="/libs/jquery-validation/dist/localization/messages_fr.min.js"></script>
+<script>
+    $("form").validate(
+        {
+            errorClass: "invalid-feedback",
+            errorElement: "div",
+            errorPlacement: function (error, element) {
+                const parent = $(element).parent();
+                if(parent.hasClass("input-icon") || parent.hasClass("input-group"))
+                    error.insertAfter(parent);
+                else
+                    error.insertAfter(element);
+            },
+            highlight: function (element) {
+                $(element).addClass("is-invalid is-invalid-lite");
+            },
+            unhighlight: function (element) {
+                $(element).removeClass("is-invalid is-invalid-lite");
+            }
+        }
+    );
+</script>
