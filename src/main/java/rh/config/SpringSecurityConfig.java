@@ -6,15 +6,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.authentication.AuthenticationManager;
-
-import java.beans.Customizer;
 
 @Configuration
 @EnableWebSecurity
@@ -29,7 +23,7 @@ public class SpringSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(
                 auth -> {
-                    auth.requestMatchers("/css/**", "/js/**", "/img/**", "/libs/**", "/res/**").permitAll();
+                    auth.requestMatchers("/css/**", "/js/**", "/img/**", "/libs/**", "/res/**", "/login").permitAll();
 
                     auth.requestMatchers("/rh").hasRole("RH");
                     auth.requestMatchers("/service").hasRole("SERVICE");
@@ -40,12 +34,11 @@ public class SpringSecurityConfig {
                 ).formLogin(
                         form -> {
                             form.loginPage("/login");
-                            form.defaultSuccessUrl("/");
-                            form.permitAll();
+                            form.defaultSuccessUrl("/", true);
                             form.usernameParameter("email");
                             form.passwordParameter("password");
                         }
-                ).logout(LogoutConfigurer::permitAll)
+                )
                 .build();
     }
 

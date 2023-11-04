@@ -1,3 +1,7 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="fr">
+
 <header class="navbar-expand-md sticky-top">
   <div class="collapse navbar-collapse" id="navbar-menu">
     <div class="navbar">
@@ -15,7 +19,7 @@
             </a>
           </li>
 
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_RH') or hasRole('ROLE_SERVICE')">
             <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false" >
                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                       <i class="icon fa-solid fa-user-doctor"></i>
@@ -47,3 +51,5 @@
     </div>
   </div>
 </header>
+
+</html>

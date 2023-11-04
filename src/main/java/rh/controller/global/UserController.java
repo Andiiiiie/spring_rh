@@ -23,4 +23,5 @@ public class UserController {
     public String login(@ModelAttribute("user") User user) {
         return "global/user/login";
     }
+
 }
