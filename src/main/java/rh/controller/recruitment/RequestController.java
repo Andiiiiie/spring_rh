@@ -81,6 +81,17 @@ public class RequestController {
         return "recruitment/request/requirements_detail";
     }
 
+    @GetMapping("/request/detail/{id}/tests")
+    public String detailTests(@PathVariable Long id, Model model) {
+        Optional<Request> requestC = requestRepository.findById(id);
+        if (requestC.isEmpty()) return "redirect:/request/list";
+
+        Request request = requestC.get();
+        model.addAttribute("request", request);
+        model.addAttribute("tests", request.getTests());
+        return "recruitment/request/tests_detail";
+    }
+
 
     // Create general info
     @GetMapping("/request/create")

@@ -67,7 +67,9 @@ public class Request {
             case -5 -> new State("Brouillon", "yellow", "pencil-alt");
             case 0 -> new State("Création", "secondary", "spinner");
             case 5 -> new State("En attente", "warning", "clock");
-            case 10 -> new State("Acceptée", "success", "check");
+            case 10 -> new State("En annonce", "purple", "bullhorn");
+            case 15 -> new State("En traitement", "info", "spinner");
+            case 20 -> new State("Fini", "success", "check");
             default -> new State("Inconnu", "dark", "question");
         };
     }

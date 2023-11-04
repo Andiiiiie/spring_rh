@@ -40,13 +40,13 @@
                       Informations générales
                     </a>
                   </li>
-                  <li class="step-item active">
-                    Critères
-                  </li>
                   <li class="step-item">
-                    <a th:href="@{/request/detail/{requestId}/tests (requestId=${request.getId()})}">
-                      Test
+                    <a th:href="@{/request/detail/{requestId}/requirements (requestId=${request.getId()})}">
+                      Critères
                     </a>
+                  </li>
+                  <li class="step-item active">
+                      Test
                   </li>
                 </ul>
               </div>
@@ -55,17 +55,17 @@
           </div>
         </div>
 
-        <div class="row" th:if="${requirements.isEmpty()}">
+        <div class="row" th:if="${tests.isEmpty()}">
           <div class="col-12">
             <div class="card">
               <div class="card-body text-muted text-center">
-                La requête ne contient pas de critère
+                La requête ne contient pas de test
               </div>
             </div>
           </div>
         </div>
 
-        <div class="row" th:if="${!requirements.isEmpty()}">
+        <div class="row" th:if="${!tests.isEmpty()}">
           <div class="col-12">
             <div class="card card-lg">
               <div class="card-body">
@@ -75,18 +75,18 @@
                     <h2 class="mb-3">Les critères</h2>
                     <div id="faq-1" class="accordion" role="tablist" aria-multiselectable="true">
 
-                      <div class="accordion-item" th:each="requirement, stat: ${requirements}">
+                      <div class="accordion-item" th:each="test, stat: ${tests}">
                         <div class="accordion-header" role="tab">
                           <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq-1-1" aria-expanded="false"
-                            th:text="${requirement.getRequirementType().getName()+' - '+requirement.getName()}">
+                            th:text="${test.getQuestion()}">
                           </button>
                         </div>
                         <div id="faq-1-1" class="accordion-collapse collapse" role="tabpanel" data-bs-parent="#faq-1" style="">
                           <div class="accordion-body pt-0">
-                            <p th:if="${requirement.getRequirementAnswers().isEmpty()}">Il n'y a pas de choix possible</p>
+                            <p th:if="${test.getTestAnswers().isEmpty()}">Il n'y a pas de choix possible</p>
                             <ul class="list-group">
-                              <li class="list-group-item" th:each="requirementAnswer: ${requirement.getRequirementAnswers()}"
-                                  th:text="${requirementAnswer.getValue() + ' - ' + requirementAnswer.getMark()}">
+                              <li class="list-group-item" th:each="testAnswer: ${test.getTestAnswers()}"
+                                  th:text="${testAnswer.getValue() + ' - ' + testAnswer.getMark()}">
                               </li>
                             </ul>
                           </div>

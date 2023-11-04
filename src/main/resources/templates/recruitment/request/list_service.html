@@ -56,7 +56,7 @@
                         <a th:if="${request.getState() == -5}" th:href="@{/request/create/{id} (id=${request.getId()})}" class="btn btn-primary">
                           <i class="fa-solid fa-file-pen"></i>
                         </a>
-                        <a th:if="${request.getState() != -5}" th:href="@{/request/delete/{id} (id=${request.getId()})}" class="btn btn-danger">
+                        <a th:if="${request.getState() == 5}" th:href="@{/request/delete/{id} (id=${request.getId()})}" class="btn btn-danger">
                           <i class="fa-solid fa-xmark"></i>
                         </a>
                       </td>
