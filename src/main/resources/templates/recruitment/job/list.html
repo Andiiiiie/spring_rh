@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Liste des métiers')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+  <header th:replace="~{fragments/navbar}"></header>
+  <header th:replace="~{fragments/menu}"></header>
+
+  <div class="page-wrapper">
+    <!-- Page header -->
+    <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Liste des métiers')}"></div>
+
+    <!-- Page body -->
+    <div class="page-body">
+      <div class="container-xl">
+        <!-- Content here -->
+
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <a class="btn btn-primary" th:href="@{/job/create}">
+                  Nouveau métier
+                  <i class="fa-solid fa-plus mx-2"></i>
+                </a>
+              </div>
+
+              <div class="card-body">
+                <table id="table" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>Catégorie</th>
+                    <th>Métier</th>
+                    <th>Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:each="job: ${jobList}">
+                    <td th:text="${job.getJobCategory().getName()}"></td>
+                    <td th:text="${job.getTitle()}"></td>
+                    <td>
+                      <a th:href="@{/job/update/{id} (id=${job.getId()})}" class="btn btn-warning">
+                        <i class="fa-solid fa-edit"></i>
+                      </a>
+                      <a th:href="@{/job/delete/{id} (id=${job.getId()})}" class="btn btn-danger">
+                        <i class="fa-solid fa-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <th>Catégorie</th>
+                    <th>Métier</th>
+                    <th>Actions</th>
+                  </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Page footer -->
+    <footer th:replace="~{fragments/footer}"></footer>
+  </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
+</body>
+
+</html>
