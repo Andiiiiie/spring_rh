@@ -22,7 +22,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <a class="btn btn-primary">
+                <a class="btn btn-primary" th:href="@{/request/create}">
                   Faire une requête
                   <i class="fa-solid fa-file-alt mx-2"></i>
                 </a>
@@ -41,27 +41,33 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Informatique</td>
-                      <td>Développeur Web</td>
-                      <td>3</td>
+                    <tr th:each="request: ${requests}">
+                      <td th:text="${request.getService().getName()}"></td>
+                      <td th:text="${request.getJob().getTitle()}"></td>
+                      <td th:text="${request.getNumberToHire()}"></td>
                       <td>
-                        <span class="badge bg-success">
+                        <span class="badge bg-success" th:if="${request.getState() == 10}">
                           Accepté <i class="fa-solid fa-check"></i>
                         </span>
-                        <span class="badge bg-danger">
+                        <span class="badge bg-danger" th:if="${request.getState() == -10}">
                           Refusé <i class="fa-solid fa-times"></i>
                         </span>
-                        <span class="badge bg-warning">
+                        <span class="badge bg-warning" th:if="${request.getState() == 5}">
                           En attente <i class="fa-solid fa-clock"></i>
                         </span>
+                        <span class="badge bg-yellow" th:if="${request.getState() == -5}">
+                          Brouillon <i class="fa-solid fa-pen"></i>
+                        </span>
+                      </td>
+                      <td th:text="${#dates.format(request.getRequestDate(), 'yyyy/MM/dd HH:mm')}">
+
                       </td>
                       <td>
-                        2021/05/02
-                      </td>
-                      <td>
-                        <a href="" class="btn btn-primary">
+                        <a th:if="${request.getState() == -5}" th:href="@{/request/create/{id} (id=${request.getId()})}" class="btn btn-primary">
                           <i class="fa-solid fa-file-pen"></i>
+                        </a>
+                        <a th:if="${request.getState() != -5}" th:href="@{/request/delete/{id} (id=${request.getId()})}" class="btn btn-danger">
+                          <i class="fa-solid fa-xmark"></i>
                         </a>
                       </td>
                     </tr>

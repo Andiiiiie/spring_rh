@@ -17,16 +17,15 @@ public class Requirement {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "requirement_type_id")
     private RequirementType requirementType;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JoinColumn(name = "requirement_id")
-    private List<Answer> answers = new ArrayList<>();
+    @OneToMany(mappedBy = "requirement", orphanRemoval = true, cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<RequirementAnswer> requirementAnswers = new ArrayList<>();
 
     @Column(name = "coef", nullable = false)
     private double coef = 1;

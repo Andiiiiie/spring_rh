@@ -20,7 +20,9 @@ public class Test {
     @Column(name = "name", nullable = false)
     private String question;
 
-    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JoinColumn(name = "requirement_id")
-    private List<Answer> answers = new ArrayList<>();
+    @OneToMany(mappedBy = "test", orphanRemoval = true, cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<TestAnswer> testAnswers = new ArrayList<>();
+
+    @Column(name = "coef", nullable = false)
+    private double coef = 1;
 }

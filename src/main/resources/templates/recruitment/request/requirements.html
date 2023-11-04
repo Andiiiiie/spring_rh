@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Création de requête')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+  <header th:replace="~{fragments/navbar}"></header>
+  <header th:replace="~{fragments/menu}"></header>
+
+  <div class="page-wrapper">
+    <!-- Page header -->
+    <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Critère de recrutement')}"></div>
+
+    <!-- Page body -->
+    <div class="page-body">
+      <div class="container-xl">
+        <!-- Content here -->
+
+        <div class="row row-cards mb-3">
+          <div class="col-12">
+
+            <div class="card">
+              <div class="card-header">
+                <ul class="steps steps-green steps-counter my-4">
+                  <li class="step-item">Informations générales</li>
+                  <li class="step-item active">Critères</li>
+                  <li class="step-item">Test</li>
+                </ul>
+              </div>
+
+              <form class="card-body" method="post" th:object="${requirement}"
+                    th:action="@{/request/create/{id}/requirements (id=${requestId})}" >
+                <div class="row row-cards">
+                  <div class="col-sm-5 col-md-5">
+                    <div class="mb-1">
+                      <label class="form-label">Type de critère</label>
+                      <select class="form-select" required th:field="*{requirementType}">
+                        <option th:each="type: ${requirementTypes}" th:text="${type.getName()}" th:value="${type.getId()}">
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-5 col-md-5">
+                    <div class="mb-1">
+                      <label class="form-label">Nom du critère</label>
+                      <input type="text" class="form-control" required th:field="*{name}">
+                    </div>
+                  </div>
+                  <div class="col-sm-2 col-md-2">
+                    <div class="mb-1">
+                      <label class="form-label">Coefficient</label>
+                      <input type="number" class="form-control" required th:field="*{coef}">
+                    </div>
+                  </div>
+
+                  <div class="col-sm-10 col-md-10">
+                    <div>
+                      <label class="form-label">Réponse</label>
+                      <input type="text" class="form-control" required name="answer_value[]">
+                    </div>
+                  </div>
+                  <div class="col-sm-2 col-md-2">
+                  <div>
+                        <label class="form-label">Note</label>
+                        <input type="number" class="form-control" required name="answer_mark[]" min="0">
+                      </div>
+                  </div>
+
+                  <div class="col-sm-10 col-md-10">
+                    <div>
+                      <label class="form-label">Réponse</label>
+                      <input type="text" class="form-control" required name="answer_value[]">
+                    </div>
+                  </div>
+                  <div class="col-sm-2 col-md-2">
+                    <div>
+                      <label class="form-label">Note</label>
+                      <input type="number" class="form-control" required name="answer_mark[]" min="0">
+                    </div>
+                  </div>
+
+
+                  <div class="col-sm-12 col-md-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary mt-1">Ajouter</button>
+                  </div>
+                </div>
+              </form>
+
+              <div class="card-footer d-flex justify-content-between">
+                <div>
+                  <a class="btn btn-danger mx-1" th:href="@{/request/delete/{requestId} (requestId=${request.getId()})}">
+                    Annuler
+                    <i class="fa-solid fa-xmark mx-1"></i>
+                  </a>
+                  <a class="btn btn-success mx-1" th:href="@{/request/save/{requestId} (requestId=${request.getId()})}">
+                    Confirmer la demande
+                    <i class="fa-solid fa-check mx-1"></i>
+                  </a>
+                </div>
+                <div>
+                  <a class="btn btn-ghost-azure mx-1" th:href="@{/request/create/{id} (id=${request.getId()})}">
+                    Informations générales
+                  </a>
+                  <a class="btn btn-ghost-cyan mx-1" th:href="@{/request/create/{id}/tests (id=${request.getId()})}">
+                    Gérer les tests
+                  </a>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <div class="row" th:if="${!requirements.isEmpty()}">
+          <div class="col-12">
+            <div class="card card-lg">
+              <div class="card-body">
+                <div class="space-y-4">
+
+                  <div>
+                    <h2 class="mb-3">Les critères</h2>
+                    <div id="faq-1" class="accordion" role="tablist" aria-multiselectable="true">
+
+                      <div class="accordion-item" th:each="requirement, stat: ${requirements}">
+                        <div class="accordion-header" role="tab">
+                          <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq-1-1" aria-expanded="false"
+                            th:text="${requirement.getRequirementType().getName()+' - '+requirement.getName()}">
+                          </button>
+                        </div>
+                        <div id="faq-1-1" class="accordion-collapse collapse" role="tabpanel" data-bs-parent="#faq-1" style="">
+                          <div class="accordion-body pt-0">
+                            <p th:if="${requirement.getRequirementAnswers().isEmpty()}">Il n'y a pas de choix possible</p>
+                            <ul class="list-group">
+                              <li class="list-group-item" th:each="requirementAnswer: ${requirement.getRequirementAnswers()}"
+                                  th:text="${requirementAnswer.getValue() + ' - ' + requirementAnswer.getMark()}">
+                              </li>
+                            </ul>
+                            <a class="btn btn-ghost-danger mt-1" th:href="@{/request/create/{id}/requirements/{requirementId}/delete (id=${requestId}, requirementId=${requirement.getId()})}">
+                              Supprimer
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page footer -->
+    <footer th:replace="~{fragments/footer}"></footer>
+  </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
+</body>
+
+</html>

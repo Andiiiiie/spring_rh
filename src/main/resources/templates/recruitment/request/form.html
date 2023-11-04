@@ -20,10 +20,14 @@
 
                 <div class="row row-cards">
                     <div class="col-12">
-                        <form class="card" id="requestAddForm" th:action="@{/request/create/${id}}" th:object="${request}">
+                        <form class="card" id="requestAddForm" method="post"
+                              th:action="@{/request/create/{id} (id=${id})}" th:object="${request}">
                             <div class="card-header">
                                 <ul class="steps steps-green steps-counter my-4">
-                                    <li class="step-item active">Informations générales</li>
+                                    <li class="step-item active">
+                                        Informations générales <br>
+                                        <span class='badge bg-yellow'>Brouillon</span>
+                                    </li>
                                     <li class="step-item">Critères</li>
                                     <li class="step-item">Test</li>
                                 </ul>
@@ -35,7 +39,9 @@
                                         <div class="mb-3">
                                             <label class="form-label">Métier</label>
                                             <select class="form-select" th:field="*{job}" required>
-                                                <option value=""></option>
+                                                <option th:each="job: ${jobs}" th:text="${job.getJobCategory().getName()+' - '+job.getTitle()}"
+                                                        th:value="${job.getId()}">
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
@@ -86,11 +92,37 @@
                                 </div>
                             </div>
 
-                            <div class="card-footer d-flex justify-content-end">
-                                <button class="btn btn-primary" type="submit">
+                            <div class="card-footer d-flex justify-content-end" th:if="${request.getState() == 0}">
+                                <button class="btn btn-primary mx-1" type="submit">
                                     Enregistrer
                                 </button>
                             </div>
+
+                            <div class="card-footer d-flex justify-content-between" th:if="${request.getState() == -5}">
+                                <div>
+                                    <a class="btn btn-danger mx-1" th:href="@{/request/delete/{requestId} (requestId=${request.getId()})}">
+                                        Annuler
+                                        <i class="fa-solid fa-xmark mx-1"></i>
+                                    </a>
+                                    <a class="btn btn-success mx-1" th:href="@{/request/save/{requestId} (requestId=${request.getId()})}">
+                                        Confirmer la demande
+                                        <i class="fa-solid fa-check mx-1"></i>
+                                    </a>
+                                </div>
+                                <div>
+                                    <a class="btn btn-ghost-azure mx-1" th:href="@{/request/create/{id}/requirements (id=${request.getId()})}">
+                                        Gérer les critères
+                                    </a>
+                                    <a class="btn btn-ghost-cyan mx-1" th:href="@{/request/create/{id}/tests (id=${request.getId()})}">
+                                        Gérer les tests
+                                    </a>
+                                    <button class="btn btn-warning mx-1" type="submit">
+                                        Modifier
+                                        <i class="fa-solid fa-pen mx-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+
                         </form>
                     </div>
                 </div>

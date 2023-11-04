@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "answer")
-public class Answer {
+@Table(name = "requirement_answer")
+public class TestAnswer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -19,4 +19,18 @@ public class Answer {
 
     @Column(name = "mark", nullable = false)
     private double mark;
+
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "test_id")
+    private Test test;
+
+
+    public TestAnswer() {
+    }
+
+    public TestAnswer(String value, double mark, Test test) {
+        this.value = value;
+        this.mark = mark;
+        this.test = test;
+    }
 }
