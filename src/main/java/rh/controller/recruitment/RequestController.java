@@ -1,9 +1,13 @@
 package rh.controller.recruitment;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import rh.config.CustomUserDetails;
+import rh.model.global.Service;
 import rh.model.recruitment.*;
 import rh.repository.recruitment.*;
 import rh.service.recruitment.RequestService;
@@ -18,30 +22,55 @@ public class RequestController {
     private final RequestRepository requestRepository;
     private final RequirementTypeRepository requirementTypeRepository;
     private final RequirementRepository requirementRepository;
-    private final RequirementsAnswerRepository requirementsAnswerRepository;
 
     public RequestController(RequestService requestService,
                              JobRepository jobRepository,
                              RequestRepository requestRepository,
                              RequirementTypeRepository requirementTypeRepository,
-                             RequirementRepository requirementRepository,
-                             RequirementsAnswerRepository requirementsAnswerRepository) {
+                             RequirementRepository requirementRepository) {
         this.requestService = requestService;
         this.jobRepository = jobRepository;
         this.requestRepository = requestRepository;
         this.requirementTypeRepository = requirementTypeRepository;
         this.requirementRepository = requirementRepository;
-        this.requirementsAnswerRepository = requirementsAnswerRepository;
     }
 
+    // List
     @GetMapping("/request/list")
     public String list(Model model) {
-        List<Request> requests = requestService.getListCreated();
+        List<Request> requests = requestService.getListForRh();
 
         model.addAttribute("requests", requests);
         return "recruitment/request/list";
     }
 
+    @GetMapping("/request/list/service")
+    public String listService(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        Service service = userDetails.getService();
+
+        List<Request> requests = requestService.getListCreatedByService(service);
+
+        model.addAttribute("requests", requests);
+        model.addAttribute("service", service);
+        return "recruitment/request/list_service";
+    }
+
+    // Detail
+    @GetMapping("/request/detail/{id}")
+    public String detail(@PathVariable Long id, Model model) {
+        Optional<Request> requestC = requestRepository.findById(id);
+        if (requestC.isEmpty()) return "redirect:/request/list";
+
+        Request request = requestC.get();
+        model.addAttribute("request", request);
+        return "recruitment/request/detail";
+    }
+
+
+    // Create general info
     @GetMapping("/request/create")
     public String create() {
         Long id = requestService.createEmptyService().getId();
@@ -64,7 +93,10 @@ public class RequestController {
 
     @PostMapping("/request/create/{id}")
     public String create(@PathVariable Long id, @ModelAttribute("request") Request request) {
-        requestService.create(id, request);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        requestService.create(id, request, userDetails.getUser());
         return "redirect:/request/create/" + id;
     }
 

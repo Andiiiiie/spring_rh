@@ -3,6 +3,7 @@ package rh.service.recruitment;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
+import rh.model.global.User;
 import rh.model.recruitment.*;
 import rh.repository.recruitment.*;
 
@@ -34,14 +35,19 @@ public class RequestService {
         return requestRepository.save(new Request());
     }
 
-    public void create(Long id, Request request) {
+    public void create(Long id, Request request, User user) {
         request.setId(id);
         request.setState(-5);
+        request.setUser(user);
         requestRepository.save(request);
     }
 
-    public List<Request> getListCreated() {
-        return requestRepository.findFirstByStateNotOrderByRequestDateDesc(0);
+    public List<Request> getListForRh() {
+        return requestRepository.findAllByStateNotAndStateNotOrderByRequestDateDesc(0, -5);
+    }
+
+    public List<Request> getListCreatedByService(rh.model.global.Service service) {
+        return requestRepository.findAllByUser_ServiceOrderByRequestDateDesc(service);
     }
 
     public void addRequirement(Request request, Requirement requirement, List<String> answersValue, List<Double> answersMark) {

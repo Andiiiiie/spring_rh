@@ -3,7 +3,7 @@ package rh.model.recruitment;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import rh.model.global.Service;
+import rh.model.global.User;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,8 +20,8 @@ public class Request {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "service_id")
-    private Service service;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "job_id")

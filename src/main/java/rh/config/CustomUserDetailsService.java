@@ -27,12 +27,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         rh.model.global.User user = userRepository.findByEmail(email);
-        return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRole()));
+        return new CustomUserDetails(user);
     }
 
-    private List<GrantedAuthority> getGrantedAuthorities(String role) {
+    /*private List<GrantedAuthority> getGrantedAuthorities(String role) {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
         return authorities;
-    }
+    }*/
 }

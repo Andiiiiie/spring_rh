@@ -32,8 +32,11 @@
             <div class="dropdown-menu">
               <div class="dropdown-menu-columns">
                 <div class="dropdown-menu-column">
-                  <a class="dropdown-item" th:href="@{/request/list}">
+                  <a class="dropdown-item" th:href="@{/request/list}" sec:authorize="hasRole('ROLE_RH')">
                       Requêtes
+                  </a>
+                  <a class="dropdown-item" th:href="@{/request/list/service}">
+                      Nos Requêtes
                   </a>
                   <a class="dropdown-item" th:href="@{/job/list}">
                       Métiers
