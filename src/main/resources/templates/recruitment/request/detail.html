@@ -31,16 +31,21 @@
                                     Liste des requêtes
                                 </a>
                             </div>
+
                             <div class="card-header">
                                 <ul class="steps steps-green steps-counter my-4">
                                     <li class="step-item active">
                                         Informations générales
                                     </li>
                                     <li class="step-item">
-                                        <a href="#">Critères</a>
+                                        <a th:href="@{/request/detail/{requestId}/requirements (requestId=${request.getId()})}">
+                                            Critères
+                                        </a>
                                     </li>
                                     <li class="step-item">
-                                        <a href="#">Test</a>
+                                        <a th:href="@{/request/detail/{requestId}/tests (requestId=${request.getId()})}">
+                                            Test
+                                        </a>
                                     </li>
                                 </ul>
                             </div>

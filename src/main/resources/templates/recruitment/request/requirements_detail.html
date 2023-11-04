@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Création de requête')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+  <header th:replace="~{fragments/navbar}"></header>
+  <header th:replace="~{fragments/menu}"></header>
+
+  <div class="page-wrapper">
+    <!-- Page header -->
+    <div th:replace="~{fragments/page_header ::
+            pageHeader(
+                pageTitle=${ 'Requête: ' + request.getUser().getService().getName() +' / '+ request.getJob().getJobCategory().getName()+' - '+request.getJob().getTitle()}
+            )}">
+    </div>
+
+    <!-- Page body -->
+    <div class="page-body">
+      <div class="container-xl">
+        <!-- Content here -->
+
+        <div class="row row-cards mb-3">
+          <div class="col-12">
+
+            <div class="card">
+              <div class="card-header">
+                <a class="btn btn-primary" th:href="@{/request/list}">
+                  <i class="fa-solid fa-arrow-left mx-1"></i>
+                  Liste des requêtes
+                </a>
+              </div>
+
+              <div class="card-body">
+                <ul class="steps steps-green steps-counter my-4">
+                  <li class="step-item">
+                    <a th:href="@{/request/detail/{requestId} (requestId=${request.getId()})}">
+                      Informations générales
+                    </a>
+                  </li>
+                  <li class="step-item active">
+                    Critères
+                  </li>
+                  <li class="step-item">
+                    <a th:href="@{/request/detail/{requestId}/tests (requestId=${request.getId()})}">
+                      Test
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="row" th:if="${requirements.isEmpty()}">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body text-muted text-center">
+                La requête ne contient pas de critère
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" th:if="${!requirements.isEmpty()}">
+          <div class="col-12">
+            <div class="card card-lg">
+              <div class="card-body">
+                <div class="space-y-4">
+
+                  <div>
+                    <h2 class="mb-3">Les critères</h2>
+                    <div id="faq-1" class="accordion" role="tablist" aria-multiselectable="true">
+
+                      <div class="accordion-item" th:each="requirement, stat: ${requirements}">
+                        <div class="accordion-header" role="tab">
+                          <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq-1-1" aria-expanded="false"
+                            th:text="${requirement.getRequirementType().getName()+' - '+requirement.getName()}">
+                          </button>
+                        </div>
+                        <div id="faq-1-1" class="accordion-collapse collapse" role="tabpanel" data-bs-parent="#faq-1" style="">
+                          <div class="accordion-body pt-0">
+                            <p th:if="${requirement.getRequirementAnswers().isEmpty()}">Il n'y a pas de choix possible</p>
+                            <ul class="list-group">
+                              <li class="list-group-item" th:each="requirementAnswer: ${requirement.getRequirementAnswers()}"
+                                  th:text="${requirementAnswer.getValue() + ' - ' + requirementAnswer.getMark()}">
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="card-footer d-flex justify-content-end">
+                <a class="btn btn-danger mx-1" th:href="@{/request/reject/{requestId} (requestId=${request.getId()})}">
+                  Refuser
+                  <i class="fa-solid fa-xmark mx-1"></i>
+                </a>
+                <a class="btn btn-success mx-1" th:href="@{/request/accept/{requestId} (requestId=${request.getId()})}">
+                  Accepter
+                  <i class="fa-solid fa-check mx-1"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page footer -->
+    <footer th:replace="~{fragments/footer}"></footer>
+  </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
+</body>
+
+</html>

@@ -58,6 +58,7 @@ public class RequestController {
         return "recruitment/request/list_service";
     }
 
+
     // Detail
     @GetMapping("/request/detail/{id}")
     public String detail(@PathVariable Long id, Model model) {
@@ -67,6 +68,17 @@ public class RequestController {
         Request request = requestC.get();
         model.addAttribute("request", request);
         return "recruitment/request/detail";
+    }
+
+    @GetMapping("/request/detail/{id}/requirements")
+    public String detailRequirements(@PathVariable Long id, Model model) {
+        Optional<Request> requestC = requestRepository.findById(id);
+        if (requestC.isEmpty()) return "redirect:/request/list";
+
+        Request request = requestC.get();
+        model.addAttribute("request", request);
+        model.addAttribute("requirements", request.getRequirements());
+        return "recruitment/request/requirements_detail";
     }
 
 
