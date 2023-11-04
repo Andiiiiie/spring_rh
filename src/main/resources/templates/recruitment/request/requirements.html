@@ -25,7 +25,9 @@
               <div class="card-header">
                 <ul class="steps steps-green steps-counter my-4">
                   <li class="step-item">Informations générales</li>
-                  <li class="step-item active">Critères</li>
+                  <li class="step-item active">Critères<br>
+                    <span class='badge bg-yellow' th:if="${request.getState() == -5}">Brouillon</span>
+                  </li>
                   <li class="step-item">Test</li>
                 </ul>
               </div>

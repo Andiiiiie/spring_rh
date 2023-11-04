@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Détail d\'une requête')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+    <header th:replace="~{fragments/navbar}"></header>
+    <header th:replace="~{fragments/menu}"></header>
+
+    <div class="page-wrapper">
+        <!-- Page header -->
+        <div th:replace="~{fragments/page_header ::
+            pageHeader(
+                pageTitle=${ 'Requête: ' + request.getUser().getService().getName() +' / '+ request.getJob().getJobCategory().getName()+' - '+request.getJob().getTitle()}
+            )}">
+        </div>
+
+        <!-- Page body -->
+        <div class="page-body">
+            <div class="container-xl">
+                <!-- Content here -->
+
+                <div class="row row-cards">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <a class="btn btn-primary" th:href="@{/request/list}">
+                                    <i class="fa-solid fa-arrow-left mx-1"></i>
+                                    Liste des requêtes
+                                </a>
+                            </div>
+                            <div class="card-header">
+                                <ul class="steps steps-green steps-counter my-4">
+                                    <li class="step-item active">
+                                        Informations générales
+                                    </li>
+                                    <li class="step-item">
+                                        <a href="#">Critères</a>
+                                    </li>
+                                    <li class="step-item">
+                                        <a href="#">Test</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row row-cards">
+                                    <div class="col-6">
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">
+                                                    Statut:
+                                                    <span th:class="${'badge bg-' + request.getStateDetail().getColor()}">
+                                                      <span th:text="${request.getStateDetail().getName()}"></span>
+                                                      <i th:class="${'fa-solid fa-' + request.getStateDetail().getIcon()}"></i>
+                                                    </span>
+                                                </label>
+                                                <h2 th:text="${request.getJob().getJobCategory().getName()+' - '+request.getJob().getTitle()}" ></h2>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-3 d-flex flex-column justify-content-end">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Nombre de personne</label>
+                                                    <h3 th:text="${request.getNumberToHire() + ' pers'}" class="bg bg-pink-lt pt-2 pb-2 text-center">
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-3 d-flex flex-column justify-content-end">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Volume total de travail / jour
+                                                        <i class="fa-solid fa-clock mx-1"></i> </label>
+                                                    <h3 th:text="${request.getDailyWorkHour() + ' h'}" class="bg bg-azure-lt pt-2 pb-2 text-center">
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-3 d-flex flex-column justify-content-end">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Heure de travail / personne / jour
+                                                        <i class="fa-solid fa-clock mx-1"></i></label>
+                                                    <h3 th:text="${request.getDailyPersonHour() + ' h'}" class="bg bg-purple-lt pt-2 pb-2 text-center">
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-3 d-flex flex-column justify-content-end">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Durée </label>
+                                                    <h3 th:if="${request.getDayNumber() == 0}" class="bg bg-indigo-lt pt-2 pb-2 text-center">
+                                                        Indéterminé
+                                                    </h3>
+                                                    <h3 th:if="${request.getDayNumber() != 0}" th:text="${request.getDayNumber() + ' j'}"
+                                                        class="bg bg-indigo-lt pt-2 pb-2 text-center">
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="mb-3 mb-0">
+                                                <h3>Description</h3>
+                                                <p class="text-muted"
+                                                   th:if="${request.getDescription().isEmpty()}">
+                                                    Aucune description
+                                                </p>
+                                                <p class="text-muted"
+                                                   th:text="${request.getDescription()}">
+                                                </p>
+                                            </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <div id="map" style="height: 100%; min-height: 500px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-footer d-flex justify-content-end">
+                                <a class="btn btn-danger mx-1" th:href="@{/request/reject/{requestId} (requestId=${request.getId()})}">
+                                    Refuser
+                                    <i class="fa-solid fa-xmark mx-1"></i>
+                                </a>
+                                <a class="btn btn-success mx-1" th:href="@{/request/accept/{requestId} (requestId=${request.getId()})}">
+                                    Accepter
+                                    <i class="fa-solid fa-check mx-1"></i>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page footer -->
+        <footer th:replace="~{fragments/footer}"></footer>
+    </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
+<script th:inline="javascript">
+    let coord = [[${request.getAddress()}]];
+    coord = coord.split(',').map(Number);
+    let map = L.map('map').setView(coord, 16);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    let marker = L.marker(coord).addTo(map);
+</script>
+</body>
+
+</html>

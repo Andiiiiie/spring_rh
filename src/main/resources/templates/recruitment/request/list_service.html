@@ -44,17 +44,9 @@
                       <td th:text="${request.getJob().getTitle()}"></td>
                       <td th:text="${request.getNumberToHire()}"></td>
                       <td>
-                        <span class="badge bg-success" th:if="${request.getState() == 10}">
-                          Accepté <i class="fa-solid fa-check"></i>
-                        </span>
-                        <span class="badge bg-danger" th:if="${request.getState() == -10}">
-                          Refusé <i class="fa-solid fa-times"></i>
-                        </span>
-                        <span class="badge bg-warning" th:if="${request.getState() == 5}">
-                          En attente <i class="fa-solid fa-clock"></i>
-                        </span>
-                        <span class="badge bg-yellow" th:if="${request.getState() == -5}">
-                          Brouillon <i class="fa-solid fa-pen"></i>
+                        <span th:class="${'badge bg-' + request.getStateDetail().getColor()}">
+                          <span th:text="${request.getStateDetail().getName()}"></span>
+                          <i th:class="${'fa-solid fa-' + request.getStateDetail().getIcon()}"></i>
                         </span>
                       </td>
                       <td th:text="${#dates.format(request.getRequestDate(), 'yyyy/MM/dd HH:mm')}">

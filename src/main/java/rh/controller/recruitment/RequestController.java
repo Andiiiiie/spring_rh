@@ -209,4 +209,28 @@ public class RequestController {
 
         return "redirect:/request/list";
     }
+
+    @GetMapping("/request/accept/{requestId}")
+    public String accept(@PathVariable Long requestId) {
+        Optional<Request> requestC = requestRepository.findById(requestId);
+        if (requestC.isEmpty()) return "redirect:/request/list";
+
+        Request request = requestC.get();
+        request.setState(10);
+        requestRepository.save(request);
+
+        return "redirect:/request/list";
+    }
+
+    @GetMapping("/request/reject/{requestId}")
+    public String reject(@PathVariable Long requestId) {
+        Optional<Request> requestC = requestRepository.findById(requestId);
+        if (requestC.isEmpty()) return "redirect:/request/list";
+
+        Request request = requestC.get();
+        request.setState(-10);
+        requestRepository.save(request);
+
+        return "redirect:/request/list";
+    }
 }

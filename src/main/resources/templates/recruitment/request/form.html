@@ -26,7 +26,7 @@
                                 <ul class="steps steps-green steps-counter my-4">
                                     <li class="step-item active">
                                         Informations générales <br>
-                                        <span class='badge bg-yellow'>Brouillon</span>
+                                        <span class='badge bg-yellow' th:if="${request.getState() == -5}">Brouillon</span>
                                     </li>
                                     <li class="step-item">Critères</li>
                                     <li class="step-item">Test</li>

@@ -61,4 +61,15 @@ public class Request {
         return (int) Math.ceil((double) getDailyWorkHour() / getDailyPersonHour());
     }
 
+    public State getStateDetail() {
+        return switch (getState()) {
+            case -10 -> new State("Rejetée", "danger", "times");
+            case -5 -> new State("Brouillon", "yellow", "pencil-alt");
+            case 0 -> new State("Création", "secondary", "spinner");
+            case 5 -> new State("En attente", "warning", "clock");
+            case 10 -> new State("Acceptée", "success", "check");
+            default -> new State("Inconnu", "dark", "question");
+        };
+    }
+
 }
