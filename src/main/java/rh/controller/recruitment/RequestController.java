@@ -12,6 +12,7 @@ import rh.model.recruitment.*;
 import rh.repository.recruitment.*;
 import rh.service.recruitment.RequestService;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -234,13 +235,23 @@ public class RequestController {
     }
 
     @GetMapping("/request/accept/{requestId}")
-    public String accept(@PathVariable Long requestId) {
+    public String accept(@PathVariable Long requestId, Model model) {
         Optional<Request> requestC = requestRepository.findById(requestId);
         if (requestC.isEmpty()) return "redirect:/request/list";
 
         Request request = requestC.get();
-        request.setState(10);
-        requestRepository.save(request);
+        model.addAttribute("request", request);
+
+        return "recruitment/request/accept";
+    }
+
+    @PostMapping("/request/accept/{requestId}")
+    public String accept(@PathVariable Long requestId, @RequestParam("endDate") String endDate) {
+        Optional<Request> requestC = requestRepository.findById(requestId);
+        if (requestC.isEmpty()) return "redirect:/request/list";
+
+        Date endDateD = Date.from(java.time.LocalDateTime.parse(endDate).atZone(java.time.ZoneId.systemDefault()).toInstant());
+        requestService.accept(requestC.get(), endDateD);
 
         return "redirect:/request/list";
     }

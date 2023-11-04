@@ -7,6 +7,7 @@ import rh.model.global.User;
 import rh.model.recruitment.*;
 import rh.repository.recruitment.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -18,17 +19,20 @@ public class RequestService {
     private final RequirementsAnswerRepository requirementsAnswerRepository;
     private final TestRepository testRepository;
     private final TestAnswerRepository testAnswerRepository;
+    private final AdvertisementRepository advertisementRepository;
 
     public RequestService(RequestRepository requestRepository,
                           RequirementRepository requirementRepository,
                           RequirementsAnswerRepository requirementsAnswerRepository,
                           TestRepository testRepository,
-                          TestAnswerRepository testAnswerRepository) {
+                          TestAnswerRepository testAnswerRepository,
+                          AdvertisementRepository advertisementRepository) {
         this.requestRepository = requestRepository;
         this.requirementRepository = requirementRepository;
         this.requirementsAnswerRepository = requirementsAnswerRepository;
         this.testRepository = testRepository;
         this.testAnswerRepository = testAnswerRepository;
+        this.advertisementRepository = advertisementRepository;
     }
 
     public Request createEmptyService() {
@@ -91,5 +95,17 @@ public class RequestService {
         requestRepository.save(request);
 
         testRepository.delete(test);
+    }
+
+    public void accept(Request request, Date endDate) {
+        request.setState(10);
+        requestRepository.save(request);
+
+        Advertisement advertisement = advertisementRepository.findByRequestId(request.getId());
+        if (advertisement == null)
+            advertisement = new Advertisement(request, endDate);
+        else
+            advertisement.setEndDate(endDate);
+        advertisementRepository.save(advertisement);
     }
 }

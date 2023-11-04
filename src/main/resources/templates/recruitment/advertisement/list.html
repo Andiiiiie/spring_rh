@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Liste des annonces')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+  <header th:replace="~{fragments/navbar}"></header>
+  <header th:replace="~{fragments/menu}"></header>
+
+  <div class="page-wrapper">
+    <!-- Page header -->
+    <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Liste des annonces')}"></div>
+
+    <!-- Page body -->
+    <div class="page-body">
+      <div class="container-xl">
+        <!-- Content here -->
+
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+
+              <div class="card-body">
+                <table id="table" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Service</th>
+                      <th>Métier</th>
+                      <th>Nombre à recruter</th>
+                      <th>Nombre de candidat</th>
+                      <th>Date limite</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr th:each="adv: ${advertisements}">
+                      <td th:text="${adv.getRequest().getUser().getService().getName()}"></td>
+                      <td th:text="${adv.getRequest().getJob().getTitle()}"></td>
+                      <td th:text="${adv.getRequest().getNumberToHire()}"></td>
+                      <td>
+                        Inconnu
+                      </td>
+                      <td th:text="${#dates.format(adv.getEndDate(), 'yyyy/MM/dd HH:mm')}"></td>
+                      <td>
+                        <a th:if="${adv.getRequest().getState() != 15}"
+                           th:href="@{/advertisement/change/{advId} (advId=${adv.getId()})}" class="btn btn-sm btn-primary">
+                          Prolonger
+                          <i class="icon fa-solid fa-plus mx-1"></i>
+                        </a>
+                        <a th:if="${adv.getRequest().getState() != 15}"
+                           th:href="@{/advertisement/terminate/{advId} (advId=${adv.getId()})}" class="btn btn-sm btn-danger">
+                          Terminer
+                          <i class="icon fa-solid fa-times mx-1"></i>
+                        </a>
+                        <a th:if="${adv.getRequest().getState() == 15}"
+                           th:href="@{candidature/list/{advId} (advId=${adv.getId()})}" class="btn btn-sm btn-success">
+                          Gérer candidats
+                          <i class="icon fa-solid fa-user mx-1"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th>Service</th>
+                      <th>Métier</th>
+                      <th>Nombre à recruter</th>
+                      <th>Nombre de candidat</th>
+                      <th>Date limite</th>
+                      <th>Actions</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Page footer -->
+    <footer th:replace="~{fragments/footer}"></footer>
+  </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
+</body>
+
+</html>
