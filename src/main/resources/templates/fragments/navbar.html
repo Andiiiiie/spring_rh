@@ -75,7 +75,9 @@
           <a href="#" class="dropdown-item">Mon profil</a>
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item">Paramètres</a>
-          <a href="#" class="dropdown-item">Déconnexion</a>
+          <form th:action="@{/logout}" method="post">
+            <button type="submit" class="dropdown-item">Déconnexion</button>
+          </form>
         </div>
       </div>
     </div>

@@ -21,7 +21,10 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "privilege_id")
-    private Privilege privilege;
+    @Column(name = "role", nullable = false)
+    private String role = "USER";
+
+    @ManyToOne
+    @JoinColumn(name = "service_id")
+    private Service service; // null if candidate
 }

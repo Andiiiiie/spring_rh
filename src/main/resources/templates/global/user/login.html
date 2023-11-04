@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="fr">
 
-<head th:replace="~{fragments/head}"></head>
+<head th:replace="~{fragments/head :: head(title='Page de connexion')}"></head>
 
 <body class="d-flex flex-column">
     <div class="page page-center">
@@ -16,8 +16,12 @@
                             <div class="card-body">
                                 <h2 class="h2 text-center mb-4">Se connecter à votre compte</h2>
 
-                                <p class="text-center text-danger" th:if="${error}">
-                                    <strong th:text="${error}"></strong>
+                                <p class="text-center text-danger" th:if="${param.error}">
+                                    <strong>Email ou mot de passe incorrect</strong>
+                                </p>
+
+                                <p class="text-center text-warning" th:if="${param.logout}">
+                                    <strong>Vous avez été déconnecté avec succès</strong>
                                 </p>
 
                                 <form id="loginForm" method="post" th:action="@{/login}" th:object="${user}">
