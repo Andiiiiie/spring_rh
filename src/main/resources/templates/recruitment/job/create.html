@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Création d\'une catégorie')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+  <header th:replace="~{fragments/navbar}"></header>
+  <header th:replace="~{fragments/menu}"></header>
+
+  <div class="page-wrapper">
+    <!-- Page header -->
+    <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Création d\'une catégorie')}"></div>
+
+    <!-- Page body -->
+    <div class="page-body">
+      <div class="container-xl">
+        <!-- Content here -->
+
+        <div class="row">
+          <div class="col-12">
+            <form class="card" th:object="${job}" th:action="@{/job/create}" method="post">
+              <div class="card-header">
+                <a th:href="@{/job/list}" class="btn btn-primary">
+                  Liste des métiers
+                  <i class="fa-solid fa-list mx-2"></i>
+                </a>
+              </div>
+
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-6 col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label">Catégorie</label>
+                      <select class="form-select" th:field="*{jobCategory}">
+                        <option th:each="jobCategory: ${jobCategoryList}" th:text="${jobCategory.getName()}" th:value="${jobCategory.getId()}">
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label">Titre</label>
+                      <input type="text" class="form-control" placeholder="Développeur web" th:field="*{title}"
+                             required />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer d-flex justify-content-end">
+                <button type="submit" class="btn btn-success">
+                  Enregistrer
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Page footer -->
+    <footer th:replace="~{fragments/footer}"></footer>
+  </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
+</body>
+
+</html>

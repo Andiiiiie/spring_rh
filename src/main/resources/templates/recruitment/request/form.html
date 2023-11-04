@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Création de requête')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+    <header th:replace="~{fragments/navbar}"></header>
+    <header th:replace="~{fragments/menu}"></header>
+
+    <div class="page-wrapper">
+        <!-- Page header -->
+        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Création d\'une requête')}"></div>
+
+        <!-- Page body -->
+        <div class="page-body">
+            <div class="container-xl">
+                <!-- Content here -->
+
+                <div class="row row-cards">
+                    <div class="col-12">
+                        <form class="card" id="requestAddForm" method="post"
+                              th:action="@{/request/create/{id} (id=${id})}" th:object="${request}">
+                            <div class="card-header">
+                                <ul class="steps steps-green steps-counter my-4">
+                                    <li class="step-item active">
+                                        Informations générales <br>
+                                        <span class='badge bg-yellow'>Brouillon</span>
+                                    </li>
+                                    <li class="step-item">Critères</li>
+                                    <li class="step-item">Test</li>
+                                </ul>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row row-cards">
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Métier</label>
+                                            <select class="form-select" th:field="*{job}" required>
+                                                <option th:each="job: ${jobs}" th:text="${job.getJobCategory().getName()+' - '+job.getTitle()}"
+                                                        th:value="${job.getId()}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Lieu
+                                                <a href="https://maps.google.com" target="_blank">
+                                                <i class="fa-solid fa-map-marked mx-1"></i>
+                                                Clique droite sur la carte
+                                                </a>
+                                            </label>
+                                            <input type="text" class="form-control" placeholder="Lat, Long" th:field="*{address}" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Volume d'heure total de travail / jour
+                                                <i class="fa-solid fa-clock mx-1"></i> </label>
+                                            <input type="number" class="form-control" placeholder="100" min="0" th:field="*{dailyWorkHour}"
+                                                   required />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Heure de travail / personne / jour
+                                                <i class="fa-solid fa-clock mx-1"></i></label>
+                                            <input type="number" class="form-control" placeholder="8" min="0" th:field="*{dailyPersonHour}"
+                                                   required max="24" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="mb-3">
+                                            <label class="form-label">Durée en jour(s) (optionnel) </label>
+                                            <input type="number" class="form-control" min="0" placeholder="0" name={"duration"} th:field="*{dayNumber}"
+                                                   required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-3 mb-0">
+                                            <label class="form-label">Description (optionnel)</label>
+                                            <textarea rows="5" class="form-control" th:field="*{description}"
+                                                      placeholder="Vous pouvez mettre une description ici.">
+
+                                            </textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="card-footer d-flex justify-content-end" th:if="${request.getState() == 0}">
+                                <button class="btn btn-primary mx-1" type="submit">
+                                    Enregistrer
+                                </button>
+                            </div>
+
+                            <div class="card-footer d-flex justify-content-between" th:if="${request.getState() == -5}">
+                                <div>
+                                    <a class="btn btn-danger mx-1" th:href="@{/request/delete/{requestId} (requestId=${request.getId()})}">
+                                        Annuler
+                                        <i class="fa-solid fa-xmark mx-1"></i>
+                                    </a>
+                                    <a class="btn btn-success mx-1" th:href="@{/request/save/{requestId} (requestId=${request.getId()})}">
+                                        Confirmer la demande
+                                        <i class="fa-solid fa-check mx-1"></i>
+                                    </a>
+                                </div>
+                                <div>
+                                    <a class="btn btn-ghost-azure mx-1" th:href="@{/request/create/{id}/requirements (id=${request.getId()})}">
+                                        Gérer les critères
+                                    </a>
+                                    <a class="btn btn-ghost-cyan mx-1" th:href="@{/request/create/{id}/tests (id=${request.getId()})}">
+                                        Gérer les tests
+                                    </a>
+                                    <button class="btn btn-warning mx-1" type="submit">
+                                        Modifier
+                                        <i class="fa-solid fa-pen mx-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page footer -->
+        <footer th:replace="~{fragments/footer}"></footer>
+    </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
+</body>
+
+</html>

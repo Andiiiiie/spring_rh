@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="fr">
 
-<head th:replace="~{fragments/head}"></head>
+<head th:replace="~{fragments/head :: head(title='Page d\'accueil')}"></head>
 
 <body class="layout-boxed">
 

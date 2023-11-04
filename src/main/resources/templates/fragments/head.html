@@ -1,9 +1,10 @@
-<head>
+<head th:fragment="head(title)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>RH Associative</title>
+  <title th:text="${title}">RH Associative</title>
 
   <!-- CSS files -->
+  <link href="/libs/datatable/datatables.min.css" rel="stylesheet">
   <link href="/css/tabler.min.css?1684106062" rel="stylesheet"/>
   <link href="/css/tabler-flags.min.css?1684106062" rel="stylesheet"/>
   <link href="/css/tabler-payments.min.css?1684106062" rel="stylesheet"/>
