@@ -33,4 +33,8 @@ public class TestAnswer {
         this.mark = mark;
         this.test = test;
     }
+
+    public double getMarkWithCoefficient() {
+        return getMark() * getTest().getCoef();
+    }
 }

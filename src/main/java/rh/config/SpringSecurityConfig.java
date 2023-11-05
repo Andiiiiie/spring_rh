@@ -34,6 +34,7 @@ public class SpringSecurityConfig {
                         form -> {
                             form.loginPage("/login");
                             form.defaultSuccessUrl("/", true);
+                            form.failureUrl("/login?error");
                             form.usernameParameter("email");
                             form.passwordParameter("password");
                         }

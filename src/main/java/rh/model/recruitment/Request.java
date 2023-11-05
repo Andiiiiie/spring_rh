@@ -61,6 +61,13 @@ public class Request {
         return (int) Math.ceil((double) getDailyWorkHour() / getDailyPersonHour());
     }
 
+    public String getContractType() {
+        return switch (getDayNumber()) {
+            case 0 -> "CDI";
+            default -> "CDD "+ getDayNumber() +" j";
+        };
+    }
+
     public State getStateDetail() {
         return switch (getState()) {
             case -10 -> new State("Rejetée", "danger", "times");
