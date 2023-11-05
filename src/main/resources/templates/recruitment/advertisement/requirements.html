@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Offre d\'emploi')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+  <header th:replace="~{fragments/navbar}"></header>
+  <header th:replace="~{fragments/menu}"></header>
+
+  <div class="page-wrapper">
+    <!-- Page header -->
+    <div th:replace="~{fragments/page_header ::
+            pageHeader(
+                pageTitle=${ 'Offre: ' + advertisement.getRequest().getJob().getJobCategory().getName()+' - '+advertisement.getRequest().getJob().getTitle()}
+            )}">
+    </div>
+
+    <!-- Page body -->
+    <div class="page-body">
+      <div class="container-xl">
+        <!-- Content here -->
+
+        <div class="row row-cards mb-3">
+          <div class="col-12">
+
+            <div class="card">
+              <div class="card-header">
+                <a class="btn btn-primary" th:href="@{/advertisement}">
+                  <i class="fa-solid fa-arrow-left mx-1"></i>
+                  Liste des offres
+                </a>
+              </div>
+
+              <div class="card-body">
+                <ul class="steps steps-green steps-counter my-4">
+                  <li class="step-item">
+                    <a th:href="@{/advertisement/detail/{advertisementId} (advertisementId=${advertisement.getId()})}">
+                      Informations générales
+                    </a>
+                  </li>
+                  <li class="step-item active">
+                    Critères
+                  </li>
+                  <li class="step-item">
+                      Test
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="row" th:if="${advertisement.getRequest().getRequirements().isEmpty()}">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body text-muted text-center">
+                L'offre ne contient pas de critère
+              </div>
+
+              <form class="card-footer d-flex justify-content-end" method="post" th:action="@{/advertisement/candidate/{advId}/requirements (advId=${advertisement.getId()})}" id="form">
+                <button type="button" class="btn btn-success mx-1" onclick="submitForm()">
+                  Continuer
+                  <i class="fa-solid fa-arrow-right mx-1"></i>
+                </button>
+              </form>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row" th:if="${!advertisement.getRequest().getRequirements().isEmpty()}">
+          <div class="col-12">
+
+            <form class="card card-lg" method="post" th:action="@{/advertisement/candidate/{advId}/requirements (advId=${advertisement.getId()})}"
+              id="form">
+              <div class="card-body">
+                <div class="space-y-4">
+
+                  <div>
+                    <h2 class="mb-3">Veuillez répondre aux critères suivants</h2>
+                    <div id="faq-1" class="accordion" role="tablist" aria-multiselectable="true">
+
+                      <div class="accordion-item" th:each="requirement, stat: ${advertisement.getRequest().getRequirements()}">
+                        <div class="accordion-header" role="tab">
+                          <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq-1-1" aria-expanded="false"
+                            th:text="${requirement.getRequirementType().getName()+' - '+requirement.getName()}">
+                          </button>
+                        </div>
+                        <div id="faq-1-1" class="accordion-collapse collapse" role="tabpanel" data-bs-parent="#faq-1" style="">
+                          <div class="accordion-body pt-0">
+                            <p th:if="${requirement.getRequirementAnswers().isEmpty()}">Il n'y a pas de choix possible</p>
+                            <ul class="list-group">
+                              <li class="list-group-item" th:each="requirementAnswer: ${requirement.getRequirementAnswers()}">
+                                <div class="row">
+                                  <div class="col-auto">
+                                    <input type="radio" class="form-check-input" th:name="${stat.index}" th:id="${requirementAnswer.getId()}"
+                                           th:value="${requirementAnswer.getId()}" required>
+                                  </div>
+                                  <div class="col" th:text="${requirementAnswer.getValue()}"></div>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="card-footer d-flex justify-content-end">
+                <button type="button" class="btn btn-success mx-1" onclick="submitForm()">
+                  Continuer
+                  <i class="fa-solid fa-arrow-right mx-1"></i>
+                </button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page footer -->
+    <footer th:replace="~{fragments/footer}"></footer>
+  </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
+<script th:inline="javascript">
+  function submitForm() {
+    let form = document.getElementById('form');
+    form.onsubmit = function (e) {
+      e.preventDefault();
+    };
+
+    let formData = new FormData(form);
+    let requirementsInput = document.querySelectorAll('input[type="radio"]:checked');
+
+    if(requirementsInput.length !== [[${advertisement.getRequest().getRequirements().size()}]]) {
+      alert('Veuillez répondre aux critères');
+      return;
+    }
+
+    for (let i = 0; i < requirementsInput.length; i++) {
+        formData.append('requirements[]', requirementsInput[i].value);
+    }
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", form.action);
+    xhr.send(formData);
+
+    window.location.href = "/advertisement/candidate/" + [[${advertisement.getId()}]] + "/tests";
+  }
+</script>
+</body>
+
+</html>

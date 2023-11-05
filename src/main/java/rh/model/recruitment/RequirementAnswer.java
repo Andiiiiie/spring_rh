@@ -21,7 +21,7 @@ public class RequirementAnswer {
     private double mark;
 
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinColumn(name = "requirement_id")
     private Requirement requirement;
 
@@ -29,8 +29,12 @@ public class RequirementAnswer {
     }
 
     public RequirementAnswer(String value, double mark, Requirement requirement) {
-        this.value = value;
-        this.mark = mark;
-        this.requirement = requirement;
+        setValue(value);
+        setMark(mark);
+        setRequirement(requirement);
+    }
+
+    public double getMarkWithCoefficient() {
+        return getMark() * getRequirement().getCoef();
     }
 }
