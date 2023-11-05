@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Validation d\'une requête')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+    <header th:replace="~{fragments/navbar}"></header>
+    <header th:replace="~{fragments/menu}"></header>
+
+    <div class="page-wrapper">
+        <!-- Page header -->
+        <div th:replace="~{fragments/page_header ::
+            pageHeader(
+                pageTitle=${ 'Requête: ' + request.getUser().getService().getName() +' / '+ request.getJob().getJobCategory().getName()+' - '+request.getJob().getTitle()}
+            )}">
+        </div>
+
+        <!-- Page body -->
+        <div class="page-body">
+            <div class="container-xl">
+                <!-- Content here -->
+
+                <div class="row row-cards">
+                    <div class="col-12">
+                        <form class="card" method="post" th:action="@{/request/accept/{requestId} (requestId=${request.getId()})}">
+                            <div class="card-header">
+                                <a class="btn btn-primary" th:href="@{/request/list}">
+                                    <i class="fa-solid fa-arrow-left mx-1"></i>
+                                    Liste des requêtes
+                                </a>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row row-cards">
+                                    <div class="col-6">
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="endDate">
+                                                    Date limite de publication:
+                                                </label>
+                                                <input type="datetime-local" name="endDate" id="endDate"
+                                                       class="form-control" required="required"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-footer d-flex justify-content-end">
+                                <button class="btn btn-success mx-1" type="submit">
+                                    Enregistrer l'annonce
+                                    <i class="fa-solid fa-check mx-1"></i>
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page footer -->
+        <footer th:replace="~{fragments/footer}"></footer>
+    </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
+<script th:inline="javascript">
+    let coord = [[${request.getAddress()}]];
+    coord = coord.split(',').map(Number);
+    let map = L.map('map').setView(coord, 16);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    let marker = L.marker(coord).addTo(map);
+</script>
+</body>
+
+</html>

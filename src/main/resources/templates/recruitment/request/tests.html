@@ -26,7 +26,9 @@
                 <ul class="steps steps-green steps-counter my-4">
                   <li class="step-item">Informations générales</li>
                   <li class="step-item">Critères</li>
-                  <li class="step-item active">Test</li>
+                  <li class="step-item active">Test <br>
+                    <span class='badge bg-yellow' th:if="${request.getState() == -5}">Brouillon</span>
+                  </li>
                 </ul>
               </div>
 
@@ -94,7 +96,7 @@
                   <a class="btn btn-ghost-azure mx-1" th:href="@{/request/create/{id} (id=${request.getId()})}">
                     Informations générales
                   </a>
-                  <a class="btn btn-ghost-cyan mx-1" th:href="@{/request/create/{id}/tests (id=${request.getId()})}">
+                  <a class="btn btn-ghost-cyan mx-1" th:href="@{/request/create/{id}/requirements (id=${request.getId()})}">
                     Gérer les critères
                   </a>
                 </div>

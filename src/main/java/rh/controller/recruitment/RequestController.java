@@ -12,6 +12,7 @@ import rh.model.recruitment.*;
 import rh.repository.recruitment.*;
 import rh.service.recruitment.RequestService;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +59,7 @@ public class RequestController {
         return "recruitment/request/list_service";
     }
 
+
     // Detail
     @GetMapping("/request/detail/{id}")
     public String detail(@PathVariable Long id, Model model) {
@@ -67,6 +69,28 @@ public class RequestController {
         Request request = requestC.get();
         model.addAttribute("request", request);
         return "recruitment/request/detail";
+    }
+
+    @GetMapping("/request/detail/{id}/requirements")
+    public String detailRequirements(@PathVariable Long id, Model model) {
+        Optional<Request> requestC = requestRepository.findById(id);
+        if (requestC.isEmpty()) return "redirect:/request/list";
+
+        Request request = requestC.get();
+        model.addAttribute("request", request);
+        model.addAttribute("requirements", request.getRequirements());
+        return "recruitment/request/requirements_detail";
+    }
+
+    @GetMapping("/request/detail/{id}/tests")
+    public String detailTests(@PathVariable Long id, Model model) {
+        Optional<Request> requestC = requestRepository.findById(id);
+        if (requestC.isEmpty()) return "redirect:/request/list";
+
+        Request request = requestC.get();
+        model.addAttribute("request", request);
+        model.addAttribute("tests", request.getTests());
+        return "recruitment/request/tests_detail";
     }
 
 
@@ -206,6 +230,40 @@ public class RequestController {
 
         Request request = requestC.get();
         requestRepository.delete(request);
+
+        return "redirect:/request/list";
+    }
+
+    @GetMapping("/request/accept/{requestId}")
+    public String accept(@PathVariable Long requestId, Model model) {
+        Optional<Request> requestC = requestRepository.findById(requestId);
+        if (requestC.isEmpty()) return "redirect:/request/list";
+
+        Request request = requestC.get();
+        model.addAttribute("request", request);
+
+        return "recruitment/request/accept";
+    }
+
+    @PostMapping("/request/accept/{requestId}")
+    public String accept(@PathVariable Long requestId, @RequestParam("endDate") String endDate) {
+        Optional<Request> requestC = requestRepository.findById(requestId);
+        if (requestC.isEmpty()) return "redirect:/request/list";
+
+        Date endDateD = Date.from(java.time.LocalDateTime.parse(endDate).atZone(java.time.ZoneId.systemDefault()).toInstant());
+        requestService.accept(requestC.get(), endDateD);
+
+        return "redirect:/request/list";
+    }
+
+    @GetMapping("/request/reject/{requestId}")
+    public String reject(@PathVariable Long requestId) {
+        Optional<Request> requestC = requestRepository.findById(requestId);
+        if (requestC.isEmpty()) return "redirect:/request/list";
+
+        Request request = requestC.get();
+        request.setState(-10);
+        requestRepository.save(request);
 
         return "redirect:/request/list";
     }
